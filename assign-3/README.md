@@ -14,6 +14,13 @@ and /assign-3-out is output in hdfs
 
 python run
 
+debug mapper.py
+	cat dataset/patent | python mapper.py
+
+debug reducer.py
+	cat dataset/reducer_debug | python reducer.py
+
+
 hadoop jar $HOME/hadoop-2.2.0/hadoop-streaming-2.2.0.2.1.0.0-92.jar \
 -file mapper.py -mapper mapper.py \
 -file reducer.py -reducer reducer.py \
