@@ -1,0 +1,28 @@
+
+# starting Services
+start-dfs.sh
+start-yarn.sh
+
+
+# making aliases
+list				--> 				alias hls='hdfs dfs -ls'  
+del					--> 				alias hrm='hdfs dfs -rm'
+upload				--> 				alias hput='hdfs dfs -put'
+list recursive		--> 				alias hlsr='hdfs dfs -lsr'
+
+## running mar red in python
+
+hadoop jar $HOME/hadoop-2.2.0/hadoop-streaming-2.2.0.2.1.0.0-92.jar \
+-file mapper.py -mapper mapper.py \
+-file reducer.py -reducer reducer.py \
+-input /word_count_input/* -output /word_count_output
+===================================================
+
+
+
+SPark
+download spark
+
+READ readme very very very good
+
+build by giving sbt/sbt -Dhadoop.version=2.2.0 -Pyarn assembly
