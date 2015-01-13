@@ -1,0 +1,6 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="MaxPublished">
+    <output-path>$PROJECT_DIR$/out/artifacts/MaxPublished</output-path>
+    <root id="archive" name="MaxPublished.jar" />
+  </artifact>
+</component>
