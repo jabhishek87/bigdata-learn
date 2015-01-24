@@ -5,8 +5,8 @@ import java.io.IOException;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.*;
+//import org.apache.hadoop.mapreduce.Reducer;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
@@ -18,7 +18,8 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
-import org.apache.hadoop.mapred.lib.MultipleInputs;
+//import org.apache.hadoop.mapred.lib.MultipleInputs;
+import org.apache.hadoop.mapreduce.lib.input.MultipleInputs;
 
 
 public class MaxPublished {
@@ -43,8 +44,7 @@ public class MaxPublished {
             String tokens[] = value.toString().split(delim);
             if(tokens.length >= 4) {
                 year = TryParseInt(tokens[3].trim());
-                if(year == 2002)
-                {
+                if(year == 2002) {
                     ISBN = new Text( new Text(tokens[0].trim()));
                     JoinTag = new Text("YEAR\t" + year.toString());
                     context.write(ISBN, JoinTag);
@@ -85,12 +85,10 @@ public class MaxPublished {
             {
                 joinTag = value.toString();
                 String parts[]  = value.toString().split("\t");
-                if(parts.length==2 && parts[0].equals("YEAR"))
-                {
+                if(parts.length==2 && parts[0].equals("YEAR")){
                     ISBNYear = parts[1];
 
-                } else if (parts.length==2 && parts[0].equals("RATING"))
-                {
+                } else if (parts.length==2 && parts[0].equals("RATING")){
                     Rating = parts[1];
                 }
             }
@@ -106,7 +104,6 @@ public class MaxPublished {
 
     public static void main(String[] args) throws Exception {
 
-
         Job job = Job.getInstance(new Configuration());
         job.setJarByClass(MaxPublished.class);
         job.setReducerClass(ISBNRatingReducer.class);
@@ -114,13 +111,8 @@ public class MaxPublished {
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
 
-        MultipleInputs.addInputPath(job, new Path(args[0]),TextInputFormat.class, ISBNYearMapper.class);
-        MultipleInputs.addInputPath(job, new Path(args[1]),TextInputFormat.class, ISBNRatingMapper.class);
-
-        //addInputPath(Job job, Path path, Class < ?extends InputFormat> inputFormatClass, Class<? extends Mapper> mapperClass)
-        //Add a Path with a custom InputFormat and Mapper to the list of inputs for the map-reduce job.
-
-
+        MultipleInputs.addInputPath(job,  new Path(args[0]),TextInputFormat.class, ISBNYearMapper.class);
+        MultipleInputs.addInputPath(job,  new Path(args[1]),TextInputFormat.class, ISBNRatingMapper.class);
 
         Path outputpath = new Path(args[2]+"_temp");
         FileOutputFormat.setOutputPath(job,outputpath);
@@ -149,5 +141,7 @@ public class MaxPublished {
         }
 
     }
+
+
 
 }
